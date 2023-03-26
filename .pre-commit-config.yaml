@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ktlint
+        name: ktlint for changes
+        stages: [ commit, push, manual ]
+        language: system
+        verbose: true
+        pass_filenames: true
+        entry: sh scripts/lint-correct-changed.sh
+        files: \.(kt|kts)$
