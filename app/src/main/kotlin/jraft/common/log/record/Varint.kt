@@ -33,6 +33,31 @@ object Varint {
         buffer.put(actualValue.toByte())
     }
 
+    fun readUnsignedVarint(buffer: ByteBuffer): Int {
+        var value = 0
+        var shift = 0
+        var b: Int
+        do {
+            b = buffer.get().toInt()
+            /**
+             * 0x7F = 127 = 0111 1111
+             * (b and 0x7F) -> 7비트를 가져옴
+             * (b and 0x7F shl shift) -> payload를 nth에 맞게 shift
+             * value or ((b and 0x7F) shl shift) -> 기존 value에 payload를 추가
+             */
+            value = value or ((b and 0x7F) shl shift)
+            shift += 7
+            if (shift > 35) {
+                throw IllegalArgumentException("Varint is too long")
+            }
+        }
+        // 0x80 = 1000 0000
+        // 8번째 비트가 0이면 종료
+        while (b and 0x80 != 0)
+
+        return value
+    }
+
     fun sizeOfVarint(value: Int): Int {
         return sizeOfUnsignedVarint(zigZagEncode(value))
     }

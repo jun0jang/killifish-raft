@@ -38,9 +38,11 @@ class VarintTest : FreeSpec({
             // 2147483647 == 0b0111_1111_1111_1111_1111_1111_1111_1111
             2147483647 to byteArrayOf(-1, -1, -1, -1, 7),
         )
-        val buffer = ByteBuffer.allocate(5)
 
         for ((value, expected) in pairs) {
+            // Given
+            val buffer = ByteBuffer.allocate(5)
+
             // When
             Varint.writeUnsignedVarint(value, buffer)
 
@@ -50,11 +52,26 @@ class VarintTest : FreeSpec({
                 buffer.array(),
                 "Implementations do not match for integer=$value",
             )
-            buffer.clear()
         }
     }
 
-    "testSizeOfVariant" {
+    "readVarint" {
+        val values = 0..Int.MAX_VALUE step 13
+        for (value in values) {
+            // Given
+            val buffer = ByteBuffer.allocate(5)
+            Varint.writeUnsignedVarint(value, buffer)
+            buffer.flip()
+
+            // When
+            val readValue = Varint.readUnsignedVarint(buffer)
+
+            // Then
+            readValue shouldBe value
+        }
+    }
+
+    "sizeOfVariant" {
         // Given
         val pairs = listOf(
             0b11111111_11111111_11111111_11111111 to 1, // -1's size is 1
