@@ -1,4 +1,4 @@
-package jraft.message
+package jraft.common.message
 
 class CreateTopicsRequestData(
     val topics: List<CreatableTopic>,

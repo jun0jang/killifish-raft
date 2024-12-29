@@ -2,32 +2,32 @@ package jraft.common.log.record
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import jraft.common.utils.ByteBufferOutputStream
+import jraft.common.utils.ByteUtils
 import org.junit.jupiter.api.Assertions.assertArrayEquals
-import java.nio.ByteBuffer
+import java.io.DataOutputStream
 
 class VarintTest : FreeSpec({
 
-    "zigZagEncode" {
-        // Given
-        val pairs = listOf(
-            -1 to 1,
-            1 to 2,
-            -2 to 3,
-            2 to 4,
-            -64 to 127,
-            64 to 128,
-        )
+    "write and read varint" {
+        val values = 0..Int.MAX_VALUE step 13
+        for (value in values) {
+            // Given
+            val out = ByteBufferOutputStream.new(5)
+            ByteUtils.writeVarint(value, DataOutputStream(out))
 
-        for ((value, expected) in pairs) {
+            val buffer = out.buffer()
+            buffer.flip()
+
             // When
-            val encoded = Varint.zigZagEncode(value)
+            val readValue = ByteUtils.readVarint(buffer)
 
             // Then
-            encoded shouldBe expected
+            readValue shouldBe value
         }
     }
 
-    "writeVarint" {
+    "writeUnsignedVarint" {
         // Given
         val pairs = listOf(
             1 to byteArrayOf(1, 0, 0, 0, 0),
@@ -41,10 +41,12 @@ class VarintTest : FreeSpec({
 
         for ((value, expected) in pairs) {
             // Given
-            val buffer = ByteBuffer.allocate(5)
+            val out = ByteBufferOutputStream.new(5)
 
             // When
-            Varint.writeUnsignedVarint(value, buffer)
+            ByteUtils.writeUnsignedVarint(value, DataOutputStream(out))
+
+            val buffer = out.buffer()
 
             // Then
             assertArrayEquals(
@@ -55,16 +57,18 @@ class VarintTest : FreeSpec({
         }
     }
 
-    "readVarint" {
+    "readUnsignedVarint" {
         val values = 0..Int.MAX_VALUE step 13
         for (value in values) {
             // Given
-            val buffer = ByteBuffer.allocate(5)
-            Varint.writeUnsignedVarint(value, buffer)
+            val output = ByteBufferOutputStream.new(5)
+            ByteUtils.writeUnsignedVarint(value, DataOutputStream(output))
+
+            val buffer = output.buffer()
             buffer.flip()
 
             // When
-            val readValue = Varint.readUnsignedVarint(buffer)
+            val readValue = ByteUtils.readUnsignedVarint(buffer)
 
             // Then
             readValue shouldBe value
@@ -84,7 +88,7 @@ class VarintTest : FreeSpec({
         ).map { (value, expected) -> value.toInt() to expected }
 
         for ((value, expected) in pairs) {
-            val size = Varint.sizeOfVarint(value)
+            val size = ByteUtils.sizeOfVarint(value)
 
             size shouldBe expected
         }

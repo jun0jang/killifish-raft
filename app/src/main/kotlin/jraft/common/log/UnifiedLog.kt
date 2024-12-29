@@ -1,6 +1,6 @@
 package jraft.common.log
 
-import jraft.common.log.record.MemoryRecords
+import jraft.common.record.MemoryRecords
 
 class UnifiedLog {
     fun appendAsFollower(records: MemoryRecords) {

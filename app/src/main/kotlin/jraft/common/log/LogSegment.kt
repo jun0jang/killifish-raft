@@ -1,4 +1,4 @@
-package jraft.common.log.record
+package jraft.common.log
 
 class LogSegment {
 

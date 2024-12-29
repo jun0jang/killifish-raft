@@ -3,8 +3,8 @@ package jraft.clients.consumer.internals
 import jraft.clients.consumer.ConsumerRecord
 import jraft.clients.consumer.SubscriptionState
 import jraft.common.TopicPartition
-import jraft.common.log.record.Record
-import jraft.common.log.record.RecordBatch
+import jraft.common.record.Record
+import jraft.common.record.RecordBatch
 import jraft.common.requests.FetchResponseData
 
 class CompletedFetch(

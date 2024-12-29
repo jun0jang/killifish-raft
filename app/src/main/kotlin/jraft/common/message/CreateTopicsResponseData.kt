@@ -1,4 +1,4 @@
-package jraft.message
+package jraft.common.message
 
 import java.util.UUID
 

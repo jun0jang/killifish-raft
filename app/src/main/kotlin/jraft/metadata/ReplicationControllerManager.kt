@@ -1,8 +1,8 @@
 package jraft.metadata
 
+import jraft.common.message.CreateTopicsRequestData
+import jraft.common.message.CreateTopicsResponseData
 import jraft.common.protocol.Errors
-import jraft.message.CreateTopicsRequestData
-import jraft.message.CreateTopicsResponseData
 import jraft.metadata.placement.KRaftClusterDescriber
 import jraft.metadata.placement.PlacementSpec
 import java.util.UUID

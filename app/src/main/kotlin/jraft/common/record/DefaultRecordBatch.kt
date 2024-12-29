@@ -1,4 +1,4 @@
-package jraft.common.log.record
+package jraft.common.record
 
 import jraft.common.log.compress.CompressionType
 import java.nio.ByteBuffer

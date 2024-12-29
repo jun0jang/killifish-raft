@@ -3,6 +3,7 @@ package jraft.common.log.record
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import jraft.common.log.compress.CompressionType
+import jraft.common.record.DefaultRecordBatch
 import java.nio.ByteBuffer
 
 class DefaultRecordBatchTest : FreeSpec({
