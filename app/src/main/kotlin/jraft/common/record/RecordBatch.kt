@@ -2,9 +2,19 @@ package jraft.common.record
 
 import java.nio.ByteBuffer
 
-interface RecordBatch {
+interface RecordBatch : Iterable<Record> {
     companion object {
+        const val MAGIC_VALUE_V0: Byte = 0
+        const val MAGIC_VALUE_V1: Byte = 1
+        const val MAGIC_VALUE_V2: Byte = 2
+
+        const val CURRENT_MAGIC_VALUE: Byte = MAGIC_VALUE_V2
+
         const val NO_TIMESTAMP = -1L
+
+        const val NO_PRODUCER_ID = -1L
+
+        const val NO_SEQUENCE = -1
     }
 
     fun isValid(): Boolean

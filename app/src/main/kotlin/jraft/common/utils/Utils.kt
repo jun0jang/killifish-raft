@@ -25,4 +25,12 @@ object Utils {
             }
         }
     }
+
+    fun wrapNullable(array: ByteArray?): ByteBuffer? {
+        return if (array == null) {
+            null
+        } else {
+            ByteBuffer.wrap(array)
+        }
+    }
 }

@@ -16,7 +16,59 @@ class DefaultRecord(
     val key: ByteBuffer?,
     val value: ByteBuffer?,
     val headers: List<Header>,
-) {
+) : Record {
+    override fun offset(): Long {
+        return offset
+    }
+
+    override fun sequence(): Int {
+        return sequence
+    }
+
+    override fun sizeInBytes(): Int {
+        return sizeInBytes
+    }
+
+    override fun timestamp(): Long {
+        return timestamp
+    }
+
+    override fun keySize(): Int {
+        return key?.remaining() ?: -1
+    }
+
+    override fun hasKey(): Boolean {
+        return key != null
+    }
+
+    override fun key(): ByteBuffer? {
+        return key?.duplicate()
+    }
+
+    override fun valueSize(): Int {
+        return value?.remaining() ?: -1
+    }
+
+    override fun hasValue(): Boolean {
+        return value != null
+    }
+
+    override fun value(): ByteBuffer? {
+        return value?.duplicate()
+    }
+
+    override fun isCompressed(): Boolean {
+        return false
+    }
+
+    override fun hasTimestampType(type: TimestampType): Boolean {
+        return false
+    }
+
+    override fun headers(): List<Header> {
+        return headers
+    }
+
     companion object {
         private val NULL_VARINT_SIZE_BYTES = ByteUtils.sizeOfVarint(-1)
 

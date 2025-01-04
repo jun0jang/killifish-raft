@@ -29,10 +29,10 @@ class DefaultRecordTest : FreeSpec({
                 value = null,
             ),
             SimpleRecord.new(
-                key = null,
+                key = null as ByteBuffer?,
                 value = null,
             ),
-            SimpleRecord(
+            SimpleRecord.new(
                 key = ByteBuffer.wrap("hi".toByteArray()),
                 value = ByteBuffer.wrap("there".toByteArray()),
                 timestamp = 15L,

@@ -35,6 +35,12 @@ class ByteBufferOutputStream(
 
     fun buffer(): ByteBuffer = buffer
 
+    fun position(): Int = buffer.position()
+
+    fun position(position: Int) {
+        buffer.position(position)
+    }
+
     private fun ensureRemaining(remainingBytesRequired: Int) {
         if (remainingBytesRequired > buffer.remaining()) {
             expandBuffer(remainingBytesRequired)
