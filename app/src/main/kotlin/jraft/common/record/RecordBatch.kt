@@ -12,9 +12,11 @@ interface RecordBatch : Iterable<Record> {
 
         const val NO_TIMESTAMP = -1L
 
-        const val NO_PRODUCER_ID = -1L
+        const val NO_PRODUCER_ID: Long = -1
 
-        const val NO_SEQUENCE = -1
+        const val NO_PRODUCER_EPOCH: Short = -1
+
+        const val NO_SEQUENCE: Int = -1
     }
 
     fun isValid(): Boolean

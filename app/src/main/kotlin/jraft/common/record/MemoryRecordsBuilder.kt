@@ -88,6 +88,8 @@ class MemoryRecordsBuilder private constructor(
             return MemoryRecords.EMPTY
         }
 
+        appendStream.flush()
+
         writeDefaultBatchHeader()
         val buffer = bufferStream.buffer().duplicate()
         buffer.flip()

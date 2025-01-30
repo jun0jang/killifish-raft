@@ -14,4 +14,7 @@ class QuorumState(
             voters = voters,
         )
     }
+
+    fun maybeLeaderState() {
+    }
 }

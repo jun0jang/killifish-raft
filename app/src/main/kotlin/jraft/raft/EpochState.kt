@@ -1,3 +1,5 @@
 package jraft.raft
 
-class EpochState
+sealed interface EpochState {
+    fun epoch(): Int
+}

@@ -214,7 +214,7 @@ class DefaultRecord(
             )
         }
 
-        private fun sizeOfBodyInBytes(
+        fun sizeOfBodyInBytes(
             offsetDelta: Int,
             timestampDelta: Long,
             key: ByteBuffer?,
@@ -226,7 +226,7 @@ class DefaultRecord(
             return sizeOfBodyInBytes(offsetDelta, timestampDelta, keySize, valueSize, headers)
         }
 
-        private fun sizeOfBodyInBytes(
+        fun sizeOfBodyInBytes(
             offsetDelta: Int,
             timestampDelta: Long,
             keySize: Int,

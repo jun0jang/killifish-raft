@@ -4,6 +4,10 @@ import jraft.common.protocol.Readable
 import jraft.common.protocol.Writable
 
 class StringSerde : RecordSerde<String> {
+    override fun recordSize(data: String): Int {
+        return data.toByteArray(Charsets.UTF_8).size
+    }
+
     override fun write(data: String, out: Writable) {
         out.writeByteArray(data.toByteArray(Charsets.UTF_8))
     }

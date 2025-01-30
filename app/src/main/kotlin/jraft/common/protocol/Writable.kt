@@ -3,7 +3,7 @@ package jraft.common.protocol
 import java.nio.ByteBuffer
 
 interface Writable {
-    fun writeBye(value: Byte)
+    fun writeByte(value: Byte)
 
     fun writeShort(value: Short)
 
@@ -19,7 +19,9 @@ interface Writable {
 
     fun writeByteBuffer(value: ByteBuffer)
 
-    fun writeVarInt(value: Int)
+    fun writeVarint(value: Int)
 
-    fun writeVarLong(value: Long)
+    fun writeVarlong(value: Long)
+
+    fun flush()
 }

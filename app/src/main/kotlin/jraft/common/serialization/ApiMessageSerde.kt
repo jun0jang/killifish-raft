@@ -5,6 +5,10 @@ import jraft.common.protocol.Readable
 import jraft.common.protocol.Writable
 
 class ApiMessageSerde : RecordSerde<ApiMessageAndVersion> {
+    override fun recordSize(data: ApiMessageAndVersion): Int {
+        TODO("Not yet implemented")
+    }
+
     override fun write(data: ApiMessageAndVersion, out: Writable) {
         TODO("Not yet implemented")
     }

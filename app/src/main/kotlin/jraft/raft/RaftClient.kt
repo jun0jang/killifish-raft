@@ -6,7 +6,7 @@ import java.util.function.Supplier
 /**
  *
  */
-class RaftClient(
+class RaftClient<T>(
     nodeId: Int,
     store: QuorumStateStore,
 ) {
@@ -15,6 +15,10 @@ class RaftClient(
         store = store,
         voters = emptySet(),
     )
+
+    fun prepareAppend(epoch: Int, records: List<T>) {
+        quorum
+    }
 
     fun poll() {
     }

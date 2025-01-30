@@ -1,9 +1,9 @@
 package jraft.raft.internal
 
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 import jraft.clients.consumer.internals.FakeTime
 import jraft.common.memory.SimpleMemoryPool
-import jraft.common.message.LeaderChangeMessage
 import jraft.common.serialization.StringSerde
 
 class BatchAccumulatorTest : FreeSpec({
@@ -12,26 +12,49 @@ class BatchAccumulatorTest : FreeSpec({
     fun buildAccumulator(
         leaderEpoch: Int,
         baseOffset: Long,
-        lingerMs: Long,
         maxBatchSize: Int,
     ): BatchAccumulator<String> {
-        return BatchAccumulator(
-            serde = StringSerde(),
+        return BatchAccumulator.new(
+            epoch = leaderEpoch,
+            baseOffset = baseOffset,
+            maxBatchSize = maxBatchSize,
             memoryPool = SimpleMemoryPool(sizeBytes = 1024, strict = true),
-            lingerMs = lingerMs,
             time = time,
-            nextOffset = 0,
+            serde = StringSerde(),
         )
     }
 
-    "testLeaderChangeMessageWritten" {
+    "test write & drain" {
+        val leaderEpoch = 1
+        val baseOffset = 157L
+        val maxBatchSize = 512
+
         val acc = buildAccumulator(
-            leaderEpoch = 1,
-            baseOffset = 0,
-            lingerMs = 50,
-            maxBatchSize = 512,
+            leaderEpoch = leaderEpoch,
+            baseOffset = baseOffset,
+            maxBatchSize = maxBatchSize,
         )
 
-        acc.appendLeaderChangeMessage(LeaderChangeMessage.Empty, time.milliseconds())
+        val records = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i")
+
+        acc.append(leaderEpoch, records.subList(0, 1), false) shouldBe baseOffset
+        acc.append(leaderEpoch, records.subList(1, 3), false) shouldBe baseOffset + 2
+        acc.append(leaderEpoch, records.subList(3, 6), false) shouldBe baseOffset + 5
+        acc.append(leaderEpoch, records.subList(6, 8), false) shouldBe baseOffset + 7
+        acc.append(leaderEpoch, records.subList(8, 9), false) shouldBe baseOffset + 8
+
+        val batches = acc.drain()
+        batches.size shouldBe 1
+
+        val batch = batches[0]
+        batch.baseOffset shouldBe baseOffset
+        batch.records shouldBe records
+
+        val recordBatches = batch.data.batches().toList()
+        recordBatches.size shouldBe 1
+        recordBatches[0].count() shouldBe records.size
+        for ((i, savedRecord) in recordBatches[0].withIndex()) {
+            savedRecord.value()!!.get().toInt().toChar().toString() shouldBe records[i]
+        }
     }
 })
